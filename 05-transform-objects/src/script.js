@@ -1,6 +1,9 @@
 import './style.css'
 import * as THREE from 'three'
 import { Group } from 'three';
+import gsap from 'gsap';
+
+console.log(gsap);
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -32,7 +35,7 @@ geometriesGroup.add(boxMesh);
 const sphereMesh = new THREE.Mesh(
     new THREE.SphereGeometry(),
     new THREE.MeshBasicMaterial({ color: 0xffb606, wireframe: true }));
-sphereMesh.position.x = 6;
+sphereMesh.position.x = 3;
 geometriesGroup.add(sphereMesh)
 
 geometriesGroup.position.x = 1;
@@ -83,20 +86,25 @@ renderer.render(scene, camera);
 
 
 // Clock
-const clock = new THREE.Clock();
+//const clock = new THREE.Clock();
+
+gsap.to(boxMesh.position, { duration: 1, delay: 1, x: 2 });
+gsap.to(boxMesh.position, { duration: 1, delay: 2, x: 0 });
+
 
 
 function animation() {
-    requestAnimationFrame(animation);
-    const elapsedTime = clock.getElapsedTime();
-    boxMesh.position.x = Math.cos(elapsedTime);
-    boxMesh.rotation.y = elapsedTime * Math.PI * 1;
-    sphereMesh.rotation.x = elapsedTime * Math.PI * 2;
-    sphereMesh.position.y = Math.sin(elapsedTime + 3.10);
-    sphereMesh.position.x = Math.cos(elapsedTime);
-
-    camera.lookAt(sphereMesh.position);
+    /*  requestAnimationFrame(animation);
+     const elapsedTime = clock.getElapsedTime();
+     boxMesh.position.x = Math.cos(elapsedTime);
+     boxMesh.rotation.y = elapsedTime * Math.PI * 1;
+     sphereMesh.rotation.x = elapsedTime * Math.PI * 2;
+     sphereMesh.position.y = Math.sin(elapsedTime);
+     sphereMesh.position.x = Math.cos(elapsedTime);
+ 
+     camera.lookAt(sphereMesh.position); */
     renderer.render(scene, camera);
+    requestAnimationFrame(animation);
 }
 
 animation();
