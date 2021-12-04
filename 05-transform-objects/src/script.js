@@ -1,9 +1,8 @@
 import './style.css'
 import * as THREE from 'three'
 import { Group } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
-
-console.log(gsap);
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -16,7 +15,7 @@ const scene = new THREE.Scene();
  * Objects group
  * 
 */
-const geometriesGroup = new THREE.Group();
+const geometriesGroup = new Group();
 
 
 /**
@@ -59,6 +58,10 @@ camera.position.z = 10;
 camera.lookAt(boxMesh.position);
 scene.add(camera);
 
+
+const controls = new OrbitControls(camera, canvas);
+controls.enabled = true;
+controls.enableDamping = true;
 /**
  * Lights
  */
@@ -74,12 +77,13 @@ const axesHelper = new THREE.AxesHelper(8);
 scene.add(axesHelper);
 
 
+
 /**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
-    alpha: true
+    alpha: false
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.render(scene, camera);
@@ -91,6 +95,14 @@ renderer.render(scene, camera);
 gsap.to(boxMesh.position, { duration: 1, delay: 1, x: 2 });
 gsap.to(boxMesh.position, { duration: 1, delay: 2, x: 0 });
 
+
+window.addEventListener("resize", function () {
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(sizes.width, sizes.height);
+});
 
 
 function animation() {
@@ -108,3 +120,8 @@ function animation() {
 }
 
 animation();
+
+
+
+
+

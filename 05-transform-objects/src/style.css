@@ -1,3 +1,11 @@
+html,
 body {
-  background-color: #323232;
+  background-color: #c00303;
+  overflow: hidden;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
 }
