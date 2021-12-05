@@ -32,9 +32,10 @@ geometriesGroup.add(boxMesh);
  * Objects sphereMesh
  */
 const sphereMesh = new THREE.Mesh(
-    new THREE.SphereGeometry(),
+    getGeometry(),
     new THREE.MeshBasicMaterial({ color: 0xffb606, wireframe: true }));
 sphereMesh.position.x = 3;
+sphereMesh.position.y = 3;
 geometriesGroup.add(sphereMesh)
 
 geometriesGroup.position.x = 1;
@@ -147,3 +148,14 @@ animation();
 
 
 
+
+function getGeometry() {
+    const positions = new Float32Array(30 * 3 * 3);
+    for (var i = 0; i < positions.length; i++) {
+        positions[i] = Math.random() * (100 - -10) + -10;;
+    }
+    const customGeometry = new THREE.BufferGeometry();
+    customGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    return customGeometry;
+
+}
