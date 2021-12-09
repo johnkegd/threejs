@@ -1,6 +1,6 @@
 import './style.css'
 import * as THREE from 'three'
-import { Group, Mesh, WebGLMultipleRenderTargets } from 'three';
+import { Group } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import gsap from 'gsap';
 import * as dat from 'lil-gui';
@@ -27,15 +27,27 @@ const paramenters = {
 const geometriesGroup = new Group();
 
 
+const loader = new THREE.TextureLoader();
+const texture = loader.load('/textures/door/color.jpg', function (texture) {
+    console.log("texture loaded");
+}, undefined, function (err) {
+    console.log("some error occured while  chargin texture: ", error);
+});
+
+
+
 /**
  * Objects boxMesh
  */
 const boxMesh = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: paramenters.color }));
+    new THREE.MeshBasicMaterial({ color: paramenters.color, map: texture }));
 //boxMesh.scale.z = 2;
 boxMesh.rotation.y = Math.PI / 1.25;
 geometriesGroup.add(boxMesh);
+
+
+
 
 /**
  * Objects sphereMesh
@@ -43,25 +55,14 @@ geometriesGroup.add(boxMesh);
 const sphereMesh = new THREE.Mesh(
     getGeometry(),
     new THREE.MeshBasicMaterial({ color: paramenters.color }));
-sphereMesh.position.x = 3;
+sphereMesh.position.x = 1;
 sphereMesh.position.y = 3;
 //geometriesGroup.add(sphereMesh)
 
-geometriesGroup.position.x = 1;
+geometriesGroup.position.x = 0;
 scene.add(geometriesGroup);
 
 
-const texture = new THREE.TextureLoader().load('https://i.imgur.com/Xq7XQ8l.jpg').then(function (texture) {
-    texture.minFilter = THREE.LinearFilter;
-    texture.magFilter = THREE.LinearFilter;
-    texture.format = THREE.RGBFormat;
-    texture.mapping = THREE.UVMapping;
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(1, 1);
-    texture.needsUpdate = true;
-    sphereMesh.material.map = texture;
-});
 
 /**
  * Sizes
@@ -75,9 +76,9 @@ const sizes = {
  * Camera
  */
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
-camera.position.x = 0.3;
-camera.position.y = 2;
-camera.position.z = 10;
+camera.position.x = 2.3;
+camera.position.y = 1;
+camera.position.z = 1;
 camera.lookAt(boxMesh.position);
 scene.add(camera);
 
