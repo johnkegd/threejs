@@ -13,7 +13,7 @@ const scene = new THREE.Scene();
 
 // UI paramenters 
 const paramenters = {
-    color: 0xffb606,
+    color: 0xffffff,
     skin: function () {
         gsap.to(boxMesh.rotation, { duration: 2, y: boxMesh.rotation.y + 10 })
     },
@@ -27,18 +27,41 @@ const paramenters = {
 const geometriesGroup = new Group();
 
 
-const loader = new THREE.TextureLoader();
-const texture = loader.load('/textures/door/color.jpg', function (texture) {
+
+/**
+ * Textures loader
+ */
+const manager = new THREE.LoadingManager();
+manager.onStart = function (url, itemsLoaded, itemsTotal) {
+    console.log('Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
+}
+
+manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+    console.log('Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
+}
+
+manager.onError = function (url) { console.log('There was an error loading ' + url); }
+
+manager.onLoad = function () { console.log('Loading complete!'); }
+
+
+const textureloader = new THREE.TextureLoader(manager);
+const texture = textureloader.load('/textures/door/color.jpg', function (texture) {
     console.log("texture loaded");
 }, undefined, function (err) {
     console.log("some error occured while  chargin texture: ", error);
 });
+const normalTexture = textureloader.load('/textures/door/normal.jpg');
 
 
+texture.rotation = Math.PI / 4;
+texture.center.x = 0.5;
+texture.center.y = 0.5;
 
 /**
- * Objects boxMesh
+ * Object boxMesh
  */
+
 const boxMesh = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
     new THREE.MeshBasicMaterial({ color: paramenters.color, map: texture }));
@@ -50,7 +73,7 @@ geometriesGroup.add(boxMesh);
 
 
 /**
- * Objects sphereMesh
+ * Object sphereMesh
  */
 const sphereMesh = new THREE.Mesh(
     getGeometry(),
