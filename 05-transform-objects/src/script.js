@@ -46,7 +46,7 @@ manager.onLoad = function () { console.log('Loading complete!'); }
 
 
 const textureloader = new THREE.TextureLoader(manager);
-const texture = textureloader.load('/textures/door/color.jpg', function (texture) {
+const texture = textureloader.load('/textures/minecraft.png', function (texture) {
     console.log("texture loaded");
 }, undefined, function (err) {
     console.log("some error occured while  chargin texture: ", error);
@@ -57,6 +57,15 @@ const normalTexture = textureloader.load('/textures/door/normal.jpg');
 texture.rotation = Math.PI / 4;
 texture.center.x = 0.5;
 texture.center.y = 0.5;
+
+
+// when area is less
+texture.magFilter = THREE.NearestFilter;
+
+// when area is greater - when minFilter have nearestFilter, deactivate mipMaps to better performance
+texture.generateMipmaps = false;
+texture.minFilter = THREE.NearestFilter;
+
 
 /**
  * Object boxMesh
@@ -129,8 +138,8 @@ gui.add(boxMesh.position, 'y', -3, 3, 0.1).name("cube position Y");
 gui.add(boxMesh.material, 'wireframe').name("wireframe");
 gui.addColor(boxMesh.material, 'color').name('color');
 gui.add(paramenters, 'skin').name("skin");
-gui.add(paramenters, 'alphaEnabled').name("alpha enabled");
-gui.close();
+//gui.add(paramenters, 'alphaEnabled').name("alpha enabled");
+//gui.close();
 
 
 /**
@@ -138,6 +147,7 @@ gui.close();
  */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
+    alpha: false
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.render(scene, camera);
@@ -190,6 +200,7 @@ function animation() {
      sphereMesh.position.x = Math.cos(elapsedTime);
  
      camera.lookAt(sphereMesh.position); */
+    //geometriesGroup.rotation.x += 0.01;
     renderer.render(scene, camera);
     requestAnimationFrame(animation);
 }
