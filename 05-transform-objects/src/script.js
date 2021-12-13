@@ -1,9 +1,11 @@
 import './style.css'
 import * as THREE from 'three'
-import { CameraHelper, Group } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import gsap from 'gsap';
 import * as dat from 'lil-gui';
+import { Mesh, MeshMatcapMaterial, RGBA_ASTC_5x4_Format, TextureLoader } from 'three';
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -14,6 +16,8 @@ const scene = new THREE.Scene();
 const axesHelper = new THREE.AxesHelper(8);
 scene.add(axesHelper);
 
+const gui = new dat.GUI();
+
 const SIZES = {
     width: window.innerWidth,
     height: window.innerHeight,
@@ -21,9 +25,10 @@ const SIZES = {
 
 
 //firstStep();
-secondStep();
+//secondStep();
 
-
+// lesson 13 TEXT 3d
+text3D();
 
 
 
@@ -130,24 +135,12 @@ function firstStep() {
     camera.position.z = 1;
     camera.lookAt(boxMesh.position);
     scene.add(camera);
-
-
-    const controls = new OrbitControls(camera, canvas);
-    controls.enabled = true;
-    controls.enableDamping = true;
     /**
      * Lights
      */
     const light = new THREE.Light(0xffffff, 2.0);
     light.position.x = 2;
     scene.add(light);
-
-
-    /**
-     * axesHelper
-     */
-    const axesHelper = new THREE.AxesHelper(8);
-    scene.add(axesHelper);
 
 
     const gui = new dat.GUI();
@@ -376,12 +369,6 @@ function secondStep() {
     scene.add(camera);
 
 
-    const orbitControls = new OrbitControls(camera, canvas);
-    orbitControls.enableDamping = true;
-    orbitControls.enabled = true;
-
-
-    const gui = new dat.GUI();
     gui.add(material, "metalness").min(0).max(1).step(0.0001);
     gui.add(material, "roughness").min(0).max(1).step(0.0001);
     gui.add(material, "aoMapIntensity").min(0).max(10).step(0.0001);
@@ -392,10 +379,121 @@ function secondStep() {
     //gui.addColor(material, "color").name("Global color");
     //gui.add(parameters.torus, "radius", 0.0, 100.00, 1).name("radius");
 
-    const renderer = new THREE.WebGLRenderer({
-        canvas
-    });
+    render(scene, camera);
 
+}
+
+function text3D() {
+
+    const textureFontLoader = new FontLoader();
+    const textureLoader = new TextureLoader();
+    const camera = new THREE.PerspectiveCamera(65, SIZES.width / SIZES.height);
+    const mapcatTexture = textureLoader.load("/textures/matcaps/8.png");
+    const secondMapCatTexture = textureLoader.load("/textures/matcaps/5.png");
+    const material = new THREE.MeshMatcapMaterial({ color: 0xffffff });
+    const materialAmor = new MeshMatcapMaterial();
+    const torusGeometry = new THREE.TorusGeometry(0.5, 0.3, 16, 65);
+    gui.addColor(material, "color");
+    material.matcap = mapcatTexture;
+    materialAmor.matcap = secondMapCatTexture;
+    const parameters = {
+        size: 0.5
+    }
+
+    textureFontLoader.load('/fonts/helvetiker_regular.typeface.json',
+        function (font) {
+            const textGeometry = new TextGeometry(
+                "Gwendolin Anna", {
+                font: font,
+                size: parameters.size,
+                height: 0.2,
+                curveSegments: 0.2,
+                bevelEnabled: 5,
+                bevelThickness: 0.03,
+                bevelEnabled: true,
+                bevelSize: 0.02,
+                bevelOffset: 0,
+                bevelSegments: 4
+            }
+            );
+
+            const textLoveGeometry = new TextGeometry("Te Amo", {
+                font: font,
+                size: 2.5,
+                height: 0.2,
+                curveSegments: 0.2,
+                bevelEnabled: 5,
+                bevelThickness: 0.03,
+                bevelEnabled: true,
+                bevelSize: 0.02,
+                bevelOffset: 0,
+                bevelSegments: 4
+            });
+
+            const muchoGeometry = new TextGeometry("Mucho", {
+                font: font,
+                size: 3.5,
+                height: 0.2,
+                curveSegments: 0.2,
+                bevelEnabled: 5,
+                bevelThickness: 0.03,
+                bevelEnabled: true,
+                bevelSize: 0.02,
+                bevelOffset: 0,
+                bevelSegments: 4
+            });
+            //gui.add(parameters, "size").min(0.1).max(20).step(0.0001).name("Text size");
+            const text = new Mesh(textGeometry, material);
+
+            const textLove = new Mesh(textLoveGeometry, materialAmor);
+            const mucho = new Mesh(muchoGeometry, materialAmor);
+
+
+            textLove.position.y = 15;
+            textLove.position.z = -15;
+            textLove.rotation.x = 0.5;
+
+            mucho.position.y = -15;
+            mucho.position.z = -15;
+            mucho.rotation.x = 0.05;
+
+            textGeometry.center();
+            textLoveGeometry.center();
+            muchoGeometry.center();
+
+            scene.add(text);
+            scene.add(textLove);
+            scene.add(mucho);
+            scene.add(camera);
+
+            for (var i = 0; i < 400; i++) {
+                const donut = new Mesh(torusGeometry, material);
+                donut.position.set(randomNum(-10, 15), randomNum(-15, 18), randomNum(-15, 12));
+                donut.rotation.x = Math.PI * Math.random() * 0.5;
+                donut.rotation.y = Math.PI * Math.random() * 0.8;
+                scene.add(donut);
+            }
+
+            render(scene, camera);
+        },
+        null,
+        function (err) {
+            console.log("Error loading font: ", err);
+        }
+    );
+
+    //gui.add(material, "wireframe").name("Text wireframe");
+    camera.position.z = 7;
+    //render(scene, camera);
+
+}
+
+function render(scene, camera) {
+    const orbitControls = new OrbitControls(camera, canvas);
+    orbitControls.enableDamping = true;
+    orbitControls.enabled = true;
+
+    const renderer = new THREE.WebGLRenderer({ canvas });
     renderer.setSize(SIZES.width, SIZES.height);
     renderer.render(scene, camera);
 
@@ -405,5 +503,8 @@ function secondStep() {
     }
 
     animation();
+}
 
+function randomNum(max, min) {
+    return Math.random() * (max - min + 1) + min;
 }
