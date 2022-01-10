@@ -2,7 +2,8 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'lil-gui'
-import { Mesh, MeshStandardMaterial, PlaneGeometry } from 'three'
+import { Mesh } from 'three'
+import House from './house/house.js';
 
 const doorTexturesPath = './textures/door/';
 const wallsTexturesPath = './textures/bricks/';
@@ -67,76 +68,8 @@ floor.rotation.x = - Math.PI * 0.5
 floor.position.y = 0
 scene.add(floor)
 
-
-//house
-const house = new THREE.Group();
-scene.add(house);
-
-const walls = new THREE.Mesh(
-    new THREE.BoxGeometry(2, 1.5, 2),
-    new THREE.MeshStandardMaterial()
-);
-
-walls.material.map = textureLoader.load(wallsTexturesPath + 'color.jpg');
-walls.material.aoMap = textureLoader.load(wallsTexturesPath + 'ambientOcclusion.jpg');
-walls.material.normalMap = textureLoader.load(wallsTexturesPath + 'normal.jpg');
-walls.material.roughnessMap = textureLoader.load(wallsTexturesPath + 'roughness.jpg');
-
-walls.geometry.setAttribute('uv2', new THREE.Float32BufferAttribute(walls.geometry.attributes.uv.array, 2));
-
-walls.position.y = 0.7;
-house.add(walls);
-
-const ceiling = new THREE.Mesh(
-    new THREE.CylinderGeometry(0, 2, 1, 4),
-    new THREE.MeshStandardMaterial({ color: 0xffb606 })
-);
-ceiling.position.y = 1.8;
-ceiling.rotation.y = Math.PI / 4;
-
-house.add(ceiling);
-
-const bushMaterial = new THREE.MeshStandardMaterial({ color: '#89c854' });
-const bushGeometry = new THREE.SphereGeometry(1, 16, 16);
-
-const bush1 = new THREE.Mesh(bushGeometry, bushMaterial);
-bush1.scale.set(0.2, 0.2, 0.2);
-bush1.position.set(0.9, 0.1, 1.2);
-
-const bush2 = new THREE.Mesh(bushGeometry, bushMaterial);
-bush2.scale.set(0.20, 0.20, 0.20);
-bush2.position.set(-0.5, 0.03, 1.2);
-
-const bush3 = new THREE.Mesh(bushGeometry, bushMaterial);
-bush3.scale.set(0.10, 0.10, 0.10);
-bush3.position.set(0.65, 0.04, 1.1);
-
-const bush4 = new THREE.Mesh(bushGeometry, bushMaterial);
-bush4.scale.set(0.13, 0.15, 0.15);
-bush4.position.set(-0.8, 0.05, 1.15);
-
-house.add(bush1, bush2, bush3, bush4);
-
-
-const door = new Mesh(
-    new PlaneGeometry(0.9, 1),
-    new MeshStandardMaterial({ color: 'orange' })
-);
-door.material.map = textureLoader.load(doorTexturesPath + 'color.jpg');
-door.material.transparent = true;
-door.material.alphaMap = textureLoader.load(doorTexturesPath + 'alpha.jpg');
-door.material.aoMap = textureLoader.load(doorTexturesPath + 'ambientOcclusion.jpg');
-door.material.metalnessMap = textureLoader.load(doorTexturesPath + 'metalness.jpg');
-door.material.displacementMap = textureLoader.load(doorTexturesPath + 'height.jpg');
-door.material.roughnessMap = textureLoader.load(doorTexturesPath + 'roughness.jpg');
-door.material.normalMap = textureLoader.load(doorTexturesPath + 'normal.jpg');
-door.material.displacementScale = 0.1;
-
-door.geometry.setAttribute('uv2', new THREE.Float32BufferAttribute(door.geometry.attributes.uv.array, 2));
-
-door.position.y = 0.45;
-door.position.z = 1.001
-house.add(door);
+// house
+scene.add(House);
 
 
 // Graves
@@ -196,7 +129,7 @@ scene.add(moonLight)
 const doorLight = new THREE.PointLight('#ff7d46', 1, 7);
 doorLight.position.set(0, 1.2, 1.5);
 
-house.add(doorLight);
+//house.add(doorLight);
 
 /**
  * Sizes
@@ -251,11 +184,6 @@ doorLight.castShadow = true;
 ghost1.castShadow = true;
 ghost2.castShadow = true;
 ghost3.castShadow = true;
-walls.castShadow = true;
-bush1.castShadow = true;
-bush2.castShadow = true;
-bush3.castShadow = true;
-bush4.castShadow = true;
 floor.receiveShadow = true;
 
 // Optimizations
