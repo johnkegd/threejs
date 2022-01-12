@@ -1,69 +1,119 @@
 import * as THREE from 'three';
-import textureMapper from '../utils/textureMapper';
+import * as dat from 'lil-gui';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import walls from './walls';
+import floor from './floor';
+import door from './door';
+import roof from './roof';
+import bashes from './bashes';
+import ghosts from './ghosts';
+import graves from './graves';
+import lights from './lights';
+
+const canvas = document.querySelector('canvas.webgl');
+const scene = new THREE.Scene();
+const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight
+};
+
+const gui = new dat.GUI()
+
+
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas
+})
+renderer.setSize(sizes.width, sizes.height)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor('#262837');
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+renderer.shadowMap.enabled = true;
+
+
+
+
+const fog = new THREE.Fog('#262837', 1, 15);
+scene.fog = fog;
+
+
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+camera.position.x = 4;
+camera.position.y = 2;
+camera.position.z = 5;
+
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+
+
+
+window.addEventListener('resize', () => {
+    // Update sizes
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+
+    // Update camera
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()
+
+    // Update renderer
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+});
+
 
 const house = new THREE.Group();
 
-/*
-walls, paredes
-*/
-const walls = new THREE.Mesh(
-    new THREE.BoxGeometry(2, 1.5, 2),
-    new THREE.MeshStandardMaterial()
-);
+scene.add(house, floor, camera, graves);
 
-textureMapper(walls.material, "./textures/bricks/", "jpg");
+house.add(walls, door, roof);
 
-walls.geometry.setAttribute('uv2', new THREE.Float32BufferAttribute(walls.geometry.attributes.uv.array, 2));
-walls.position.y = 0.7;
+bashes.forEach(bashe => {
+    house.add(bashe);
+});
 
-/*
-roof, ceiling, techo
-*/
-
-const ceiling = new THREE.Mesh(
-    new THREE.CylinderGeometry(0, 2, 1, 4),
-    new THREE.MeshStandardMaterial({ color: 0xffb606 })
-);
-ceiling.position.y = 1.8;
-ceiling.rotation.y = Math.PI / 4;
-
-/**
- * bush, grama circulos
- */
-const bushMaterial = new THREE.MeshStandardMaterial({ color: '#89c854' });
-const bushGeometry = new THREE.SphereGeometry(1, 16, 16);
-
-const bush1 = new THREE.Mesh(bushGeometry, bushMaterial);
-bush1.scale.set(0.2, 0.2, 0.2);
-bush1.position.set(0.9, 0.1, 1.2);
-
-const bush2 = new THREE.Mesh(bushGeometry, bushMaterial);
-bush2.scale.set(0.20, 0.20, 0.20);
-bush2.position.set(-0.5, 0.03, 1.2);
-
-const bush3 = new THREE.Mesh(bushGeometry, bushMaterial);
-bush3.scale.set(0.10, 0.10, 0.10);
-bush3.position.set(0.65, 0.04, 1.1);
-
-const bush4 = new THREE.Mesh(bushGeometry, bushMaterial);
-bush4.scale.set(0.13, 0.15, 0.15);
-bush4.position.set(-0.8, 0.05, 1.15);
-
-/**
- * door, puerta principal
- */
-const door = new THREE.Mesh(
-    new THREE.PlaneGeometry(0.9, 1),
-    new THREE.MeshStandardMaterial({ color: 'orange' })
-);
-door.material.transparent = true;
-
-textureMapper(door.material, "./textures/door/", 'jpg');
-
-door.geometry.setAttribute('uv2', new THREE.Float32BufferAttribute(door.geometry.attributes.uv.array, 2));
-door.position.y = 0.45;
-door.position.z = 1.001
+ghosts.forEach(ghost => {
+    scene.add(ghost);
+});
 
 
-house.add(walls, ceiling, bush1, bush2, bush3, bush4, door);
-export default house;
+lights.forEach(light => {
+    // if doorLight add to the house
+    scene.add(light);
+});
+
+
+
+const clock = new THREE.Clock()
+
+const animate = () => {
+    const elapsedTime = clock.getElapsedTime();
+
+    const ghost1Angle = elapsedTime * 0.5;
+    /*     ghost1.position.x = Math.cos(ghost1Angle) * 4;
+        ghost1.position.y = Math.sin(ghost1Angle) * 4;
+        ghost1.position.z = Math.sin(elapsedTime * 3); */
+
+    /*  const ghost2Angle = - elapsedTime * 0.32;
+     ghost2.position.x = Math.cos(ghost2Angle) * 5;
+     ghost2.position.y = Math.sin(ghost2Angle) * 5;
+     ghost2.position.z = Math.sin(elapsedTime * 4) + Math.sin(elapsedTime * 2.5);
+ 
+     const ghost3Angle = - elapsedTime * 0.18;
+     ghost3.position.x = Math.cos(ghost3Angle) * (7 + Math.sin(elapsedTime * 0.32));
+     ghost3.position.y = Math.sin(ghost3Angle) * (7 + Math.sin(elapsedTime * 0.5));
+     ghost3.position.z = Math.sin(elapsedTime * 4) + Math.sin(elapsedTime * 2.5); */
+
+
+    // Update controls
+    controls.update()
+
+    // Render
+    renderer.render(scene, camera)
+
+    // Call tick again on the next frame
+    window.requestAnimationFrame(animate)
+}
+
+export default animate;

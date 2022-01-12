@@ -5,6 +5,7 @@ const textureLoader = new THREE.TextureLoader();
 const textureTypes = ["color", "ambientOcclusion", "normal", "roughness", "height", "metalness", "alpha"];
 
 const textureMapper = function (objMaterial, texturePath, format) {
+    format = format || "jpg";
     format = format.indexOf('.') > 0 ? format : '.'.concat(format)
     textureTypes.forEach(function (textureType) {
         switch (textureType) {
