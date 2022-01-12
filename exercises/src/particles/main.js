@@ -30,20 +30,18 @@ orbitControls.enableDamping = true;
 const axesHelper = new THREE.AxesHelper(8);
 scene.add(axesHelper);
 
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(),
-    new THREE.MeshBasicMaterial()
-);
-scene.add(cube);
-
 scene.add(camera);
 particles.geometry.center();
 scene.add(particles);
 
 resizeCanvas(renderer, camera);
 
+const clock = new THREE.Clock();
 
 function animation() {
+    const elapsedTime = clock.getElapsedTime();
+
+    particles.rotation.y = elapsedTime * 0.1;
     window.requestAnimationFrame(animation);
     renderer.render(scene, camera);
     orbitControls.update()
