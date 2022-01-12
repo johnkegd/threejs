@@ -8,7 +8,7 @@ const floor = new THREE.Mesh(
 )
 
 textureMapper(floor.material, floorTexturesPath, 'jpg');
-console.log(floor.material);
+//console.log(floor.material);
 
 floor.geometry.setAttribute('uv2', new THREE.Float32BufferAttribute(floor.geometry.attributes.uv.array, 2));
 floor.material.map.repeat.set(8, 8);
