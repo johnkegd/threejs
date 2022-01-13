@@ -41,7 +41,16 @@ const clock = new THREE.Clock();
 function animation() {
     const elapsedTime = clock.getElapsedTime();
 
-    particles.rotation.y = elapsedTime * 0.1;
+    //particles.rotation.y = elapsedTime * 0.1;
+
+    for (let i = 0; i < 20000; i++) {
+        const i3 = i * 3;
+        const x = particles.geometry.attributes.position.array[i3];
+
+        particles.geometry.attributes.position.array[i3 + 1] = Math.sin(elapsedTime + x);
+    }
+    particles.geometry.attributes.position.needsUpdate = true;
+
     window.requestAnimationFrame(animation);
     renderer.render(scene, camera);
     orbitControls.update()
