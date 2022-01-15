@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 
 const parameters = {
-    count: 827900,
+    count: 287200,
     size: 0.016,
-    radius: 19.51,
-    branches: 8,
+    radius: 16.56,
+    branches: 10,
     spin: 1.558,
     randomness: 1.238,
-    randomnessPower: 7.234,
-    insideColor: '#ff6030',
+    randomnessPower: 4.801,
+    insideColor: '#917546',
     outsideColor: '#1b3984',
 };
 let selfGui = null;
@@ -75,6 +75,7 @@ function galaxyBigBang(scene, gui) {
     if (selfScene) {
         selfScene.add(points);
     }
+    return points;
 }
 
 

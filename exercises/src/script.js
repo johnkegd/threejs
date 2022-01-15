@@ -20,7 +20,7 @@ const gui = new dat.GUI();
 
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-camera.position.z = 2;
+camera.position.set(15, 2.5, 13);
 
 const axesHelper = new THREE.AxesHelper(8);
 
@@ -29,7 +29,7 @@ controls.enableDamping = true;
 
 
 // init galaxy generator
-galaxyBigBang(scene, gui);
+const points = galaxyBigBang(scene, gui);
 
 
 scene.add(camera);
@@ -47,8 +47,17 @@ window.addEventListener('resize', function () {
 });
 
 
+const clock = new THREE.Clock();
+
 
 function animation() {
+    const elapsedTime = clock.getElapsedTime();
+    //camera.position.x += 0.001;
+    //console.log(camera.position.x);
+    //camera.rotateY(elapsedTime)
+    //points.rotateY(0.00001);
+    camera.position.y = Math.sin(elapsedTime / 10);
+    camera.position.z = Math.sin(elapsedTime / 100) * 30;
     window.requestAnimationFrame(animation);
     renderer.render(scene, camera);
     controls.update();
