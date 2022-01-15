@@ -32,7 +32,7 @@ controls.enableDamping = true;
 galaxyBigBang(scene, gui);
 
 
-scene.add(axesHelper, camera);
+scene.add(camera);
 
 
 const renderer = new THREE.WebGLRenderer({ canvas });

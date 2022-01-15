@@ -1,6 +1,16 @@
 import * as THREE from 'three';
 
-const parameters = { count: 1000, size: 0.02, radius: 5, branches: 3, spin: 1, randomness: 0.2 };
+const parameters = {
+    count: 827900,
+    size: 0.016,
+    radius: 19.51,
+    branches: 8,
+    spin: 1.558,
+    randomness: 1.238,
+    randomnessPower: 7.234,
+    insideColor: '#ff6030',
+    outsideColor: '#1b3984',
+};
 let selfGui = null;
 let selfScene = null;
 
@@ -9,7 +19,8 @@ const material = new THREE.PointsMaterial({
     size: parameters.size,
     sizeAttenuation: true,
     depthWrite: false,
-    blending: THREE.AdditiveBlending
+    blending: THREE.AdditiveBlending,
+    vertexColors: true,
 });
 let points = null;
 
@@ -22,7 +33,11 @@ function galaxyBigBang(scene, gui) {
         setGui();
     }
 
+    const colorInside = new THREE.Color(parameters.insideColor);
+    const colorOutside = new THREE.Color(parameters.outsideColor);
+
     const positions = new Float32Array(parameters.count * 3);
+    const colors = new Float32Array(parameters.count * 3);
     if (points !== null) {
         geometry.dispose();
         material.dispose();
@@ -38,17 +53,25 @@ function galaxyBigBang(scene, gui) {
         const spinAngle = radius * parameters.spin;
         const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
 
-        const randomY = (Math.random() - 0.5) * parameters.randomness * radius;
-        const randomX = (Math.random() - 0.5) * parameters.randomness * radius;
-        const randomZ = (Math.random() - 0.5) * parameters.randomness * radius;
+        const mixedColor = colorInside.clone();
+        mixedColor.lerp(colorOutside, radius / parameters.radius);
+
+        const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+        const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+        const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
 
         positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
         positions[i3 + 1] = randomY;
         positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
 
+        colors[i3] = mixedColor.r;
+        colors[i3 + 1] = mixedColor.g;
+        colors[i3 + 2] = mixedColor.b;
+
     }
     points = new THREE.Points(geometry, material);
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     if (selfScene) {
         selfScene.add(points);
     }
@@ -64,6 +87,9 @@ function setGui() {
         selfGui.add(parameters, 'branches').min(2).max(20).step(1).onFinishChange(galaxyBigBang);
         selfGui.add(parameters, 'spin').min(-5).max(5).step(0.001).onFinishChange(galaxyBigBang);
         selfGui.add(parameters, 'randomness').min(0).max(2).step(0.001).onFinishChange(galaxyBigBang);
+        selfGui.add(parameters, 'randomnessPower').min(1).max(10).step(0.001).onFinishChange(galaxyBigBang);
+        selfGui.addColor(parameters, 'insideColor').onFinishChange(galaxyBigBang);
+        selfGui.addColor(parameters, 'outsideColor').onFinishChange(galaxyBigBang);
     }
 }
 
