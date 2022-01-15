@@ -45,9 +45,10 @@ function animation() {
 
     for (let i = 0; i < 20000; i++) {
         const i3 = i * 3;
+
         const x = particles.geometry.attributes.position.array[i3];
 
-        particles.geometry.attributes.position.array[i3 + 1] = Math.sin(elapsedTime + x);
+        particles.geometry.attributes.position.array[i3 + 1] = Math.cos(elapsedTime + x);
     }
     particles.geometry.attributes.position.needsUpdate = true;
 
