@@ -4,11 +4,10 @@
 name: Node.js CI
 
 on:
-  push:
-    tags: 
-    - '*'
+  create:
 jobs:
   build-test-deploy:
+    if: ${{ startsWith(github.ref, 'refs/tags/v')}}
     runs-on: ubuntu-latest
     defaults:
       run:
