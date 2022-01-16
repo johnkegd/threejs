@@ -1,16 +1,35 @@
-# Three.js Journey
+![Logo](https://media.giphy.com/media/Uw2O9Vw5kYKIihfZ6w/giphy.gif)
 
-## Setup
-Download [Node.js](https://nodejs.org/en/download/).
-Run this followed commands:
+# Threejs library journary
 
-``` bash
-# Install dependencies (only the first time)
-npm install
+My travel through the learning path of three js library
 
-# Run the local server at localhost:8080
-npm run dev
+![example workflow](https://github.com/johnkegd/threejs/actions/workflows/node.js.yml/badge.svg)
 
-# Build for production in the dist/ directory
-npm run build
+## Demo: https://johnkegd.github.io/threejs/
+
+## Project Setup
+
+Download Node.js Run this followed commands:
+
+1. Install dependencies (only the first time)
+
+```bash
+  npm install
 ```
+
+2. Run the local server at localhost:8080
+
+```bash
+  npm run dev
+```
+
+3. (Optional) Build for production in the exercises/dist/ directory
+
+```bash
+  npm run build
+```
+
+## Contributing
+
+Contributions are always welcome!
