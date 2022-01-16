@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   release:
-      types: [released, edited]
+      types: [published, edited]
       
 jobs:
   build-test-deploy:
@@ -30,5 +30,4 @@ jobs:
         with:
           target_branch: gh-pages
           build_dir: exercises/dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          token: ${{ secrets.GITHUB_THREEJS_ACTION_DEPLOY}}
