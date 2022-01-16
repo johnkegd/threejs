@@ -30,6 +30,5 @@ jobs:
         with:
           target_branch: gh-pages
           build_dir: exercises/dist
-          repository: johnkegd/threejs
-          path: johnkegd/threejs
-          token: ${{ secrets.GITHUB_THREEJS_ACTION_DEPLOY}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_THREEJS_ACTION_DEPLOY}}
