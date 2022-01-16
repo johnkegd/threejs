@@ -7,6 +7,8 @@ on:
   push:
     tags: 
     - '*'
+    tags-ignore:
+    - 'v2.*'
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
