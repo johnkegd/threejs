@@ -5,10 +5,21 @@ name: Node.js CI
 
 on:
   push:
+    branches:
+     - master
+    paths-ignore:
+      - "docs/**"
+      - "*.md" 
     tags:
-    - 'v*'
+      - 'v*'
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
   release:
-   types: [published, created, edited]
+      types: [published, created, edited, released]
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
