@@ -2,7 +2,7 @@ import './style.css'
 import * as THREE from 'three';
 import * as dat from 'lil-gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { parameters, galaxyBigBang } from './galaxy/galaxy';
+//import { parameters, galaxyBigBang } from './galaxy/galaxy';
 //import houseAnimation from './house/house';
 //import particles from './particles/main';
 //houseAnimation();
@@ -29,7 +29,7 @@ controls.enableDamping = true;
 
 
 // init galaxy generator
-const points = galaxyBigBang(scene, gui);
+//const points = galaxyBigBang(scene, gui);
 
 
 scene.add(camera);
