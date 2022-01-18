@@ -2,6 +2,7 @@ import './style.css'
 import * as THREE from 'three';
 import * as dat from 'lil-gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import raycasterGroup from './raycaster/raycaster';
 //import { parameters, galaxyBigBang } from './galaxy/galaxy';
 //import houseAnimation from './house/house';
 //import particles from './particles/main';
@@ -20,7 +21,7 @@ const gui = new dat.GUI();
 
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-camera.position.set(15, 2.5, 13);
+camera.position.set(0, 2.5, 5);
 
 const axesHelper = new THREE.AxesHelper(8);
 
@@ -32,7 +33,9 @@ controls.enableDamping = true;
 //const points = galaxyBigBang(scene, gui);
 
 
-scene.add(camera);
+scene.add(camera, raycasterGroup, axesHelper);
+
+console.log(raycasterGroup);
 
 
 const renderer = new THREE.WebGLRenderer({ canvas });
@@ -56,8 +59,10 @@ function animation() {
     //console.log(camera.position.x);
     //camera.rotateY(elapsedTime)
     //points.rotateY(0.00001);
-    camera.position.y = Math.sin(elapsedTime / 10);
-    camera.position.z = Math.sin(elapsedTime / 100) * 30;
+
+    /*  camera.position.y = Math.sin(elapsedTime / 10);
+     camera.position.z = Math.sin(elapsedTime / 100) * 30; */
+
     window.requestAnimationFrame(animation);
     renderer.render(scene, camera);
     controls.update();
