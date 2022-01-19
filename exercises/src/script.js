@@ -2,7 +2,8 @@ import './style.css'
 import * as THREE from 'three';
 import * as dat from 'lil-gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import raycasterGroup from './raycaster/raycaster';
+import raycasterInit from './raycaster/raycaster';
+import { parameters } from './raycaster/raycaster';
 //import { parameters, galaxyBigBang } from './galaxy/galaxy';
 //import houseAnimation from './house/house';
 //import particles from './particles/main';
@@ -28,14 +29,12 @@ const axesHelper = new THREE.AxesHelper(8);
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
-
+raycasterInit(scene, gui);
 // init galaxy generator
 //const points = galaxyBigBang(scene, gui);
 
 
-scene.add(camera, raycasterGroup, axesHelper);
-
-console.log(raycasterGroup);
+scene.add(camera, axesHelper);
 
 
 const renderer = new THREE.WebGLRenderer({ canvas });
