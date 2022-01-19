@@ -23,7 +23,13 @@ const rayOrigin = new THREE.Vector3(-3, 0, 0);
 const rayDirection = new THREE.Vector3(10, 0, 0);
 rayDirection.normalize();
 
-raycaster(rayOrigin, rayDirection);
+raycaster.set(rayOrigin, rayDirection);
+
+const intersect = raycaster.intersectObject(mesh1);
+console.log(intersect);
+
+const intersects = raycaster.intersectObjects([mesh1, mesh2, mesh3]);
+console.log(intersects)
 
 
 
