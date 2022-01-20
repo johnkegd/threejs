@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import * as dat from 'lil-gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import raycasterInit from './raycaster/raycaster';
-import { parameters } from './raycaster/raycaster';
+import { parameters, insideAnimation } from './raycaster/raycaster';
 //import { parameters, galaxyBigBang } from './galaxy/galaxy';
 //import houseAnimation from './house/house';
 //import particles from './particles/main';
@@ -62,9 +62,10 @@ function animation() {
     /*  camera.position.y = Math.sin(elapsedTime / 10);
      camera.position.z = Math.sin(elapsedTime / 100) * 30; */
 
-    window.requestAnimationFrame(animation);
+    insideAnimation(clock, camera);
     renderer.render(scene, camera);
     controls.update();
+    window.requestAnimationFrame(animation);
 }
 
 animation();
