@@ -24,11 +24,6 @@ module.exports = {
                 template: path.resolve(__dirname, '../src/index.html'),
                 minify: true
             }),
-            new HtmlWebpackPlugin({
-                filename: 'menu.html',
-                template: path.resolve(__dirname, '../src/menu.html'),
-                minify: true,
-            }),
         ],
     module:
     {
