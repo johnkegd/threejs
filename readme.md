@@ -1,37 +1,40 @@
-<a href="https://github.com/johnkegd">
-<img alt="johnkegd animated logo" src="https://media.giphy.com/media/Uw2O9Vw5kYKIihfZ6w/giphy.gif" />
-</a>
+# create-svelte
 
-# Threejs library journary
+Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
 
-My travel through the learning path of three js library
+## Creating a project
 
-![https://github.com/johnkegd/threejs/actions/workflows/node.js.yml](https://github.com/johnkegd/threejs/actions/workflows/node.js.yml/badge.svg)
-
-## Demo: https://johnkegd.github.io/threejs/
-
-## Project Setup
-
-Download Node.js Run this followed commands:
-
-1. Install dependencies (only the first time)
+If you're seeing this, you've probably already done this step. Congrats!
 
 ```bash
-  npm install
+# create a new project in the current directory
+npm init svelte@next
+
+# create a new project in my-app
+npm init svelte@next my-app
 ```
 
-2. Run the local server at localhost:8080
+> Note: the `@next` is temporary
+
+## Developing
+
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```bash
-  npm run dev
+npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
 ```
 
-3. (Optional) Build for production in the exercises/dist/ directory
+## Building
+
+To create a production version of your app:
 
 ```bash
-  npm run build
+npm run build
 ```
 
-## Contributing
+You can preview the production build with `npm run preview`.
 
-Contributions are always welcome!
+> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment.
