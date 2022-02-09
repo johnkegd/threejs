@@ -10,6 +10,8 @@ My travel through the learning path of three js library
 
 ## Demo: https://johnkegd.github.io/threejs/
 
+## NEW DEMO: URL
+
 ## Project Setup
 
 Download Node.js Run this followed commands:
