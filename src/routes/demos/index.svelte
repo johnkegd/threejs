@@ -11,10 +11,10 @@
 
 <div class="projects">
 	<ul>
-		<li><a href="/galaxy">Galaxy</a></li>
-		<li><a href="/cementery">Cementery</a></li>
-		<li><a href="/raycaster">Raycaster</a></li>
-		<li><a href="/scroll">Scroll</a></li>
+		<li><a href="/demos/galaxy">Galaxy</a></li>
+		<li><a href="/demos/cementery">Cementery</a></li>
+		<li><a href="/demos/raycaster">Raycaster</a></li>
+		<li><a href="/demos/scroll">Scroll</a></li>
 		<li><a href="/demos/soldier">Soldier</a></li>
 	</ul>
 </div>

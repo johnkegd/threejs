@@ -1,9 +1,10 @@
 <script>
 	import { page } from '$app/stores';
 	import logo from './svelte-logo.svg';
+	export let ref = 'default';
 </script>
 
-<header class={$page.url.pathname.split('/').join('')}>
+<header class={$page.url.pathname.split('/').join('').concat(' ').concat($$props.class)} {ref}>
 	<div class="corner">
 		<a href="https://kit.svelte.dev">
 			<img src={logo} alt="SvelteKit" />
@@ -65,7 +66,7 @@
 	nav {
 		display: flex;
 		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
+		--background: white;
 	}
 
 	svg {

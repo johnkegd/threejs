@@ -3,7 +3,7 @@
 	import '../../app.css';
 </script>
 
-<Header />
+<Header class="demoHeader" ref="customHeader" />
 
 <main>
 	<slot />
@@ -14,12 +14,19 @@
 </footer>
 
 <style>
+	:global([ref='customHeader']) {
+		max-height: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 1001;
+	}
+
 	footer {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		background-color: black;
+		background-color: transparent;
 		border: none !important;
 	}
 

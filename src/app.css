@@ -20,12 +20,12 @@ body {
 	min-height: 100vh;
 	margin: 0;
 	background-color: var(--primary-color);
-	background: linear-gradient(
-		180deg,
-		var(--primary-color) 0%,
-		var(--secondary-color) 10.45%,
-		var(--tertiary-color) 41.35%
-	);
+	background-size: 1000% 100%;
+	background-image: linear-gradient(314deg, #000428, #004e92, #000428);
+	-webkit-animation: gradientBg 8s ease infinite;
+	-moz-animation: gradientBg 8s ease infinite;
+	-o-animation: gradientBg 8s ease infinite;
+	animation: gradientBg 8s ease infinite;
 	width: 100%;
 	height: 100%;
 	margin: 0;
@@ -107,5 +107,50 @@ button:focus:not(:focus-visible) {
 @media (min-width: 720px) {
 	h1 {
 		font-size: 2.4rem;
+	}
+}
+
+@-webkit-keyframes gradientBg {
+	0% {
+		background-position: 9% 0%;
+	}
+	50% {
+		background-position: 92% 100%;
+	}
+	100% {
+		background-position: 9% 0%;
+	}
+}
+@-moz-keyframes gradientBg {
+	0% {
+		background-position: 9% 0%;
+	}
+	50% {
+		background-position: 92% 100%;
+	}
+	100% {
+		background-position: 9% 0%;
+	}
+}
+@-o-keyframes gradientBg {
+	0% {
+		background-position: 9% 0%;
+	}
+	50% {
+		background-position: 92% 100%;
+	}
+	100% {
+		background-position: 9% 0%;
+	}
+}
+@keyframes gradientBg {
+	0% {
+		background-position: 9% 0%;
+	}
+	50% {
+		background-position: 92% 100%;
+	}
+	100% {
+		background-position: 9% 0%;
 	}
 }

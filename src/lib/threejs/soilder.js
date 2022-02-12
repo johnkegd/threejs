@@ -55,11 +55,11 @@ function init(el, container) {
     scene.add(mesh);
 
     const loader = new GLTFLoader();
-    loader.load('/models/gltf/soldier.glb', function (gltf) {
+    loader.load('/models/gltf/gem.glb', function (gltf) {
 
         model = gltf.scene;
         scene.add(model);
-        window.model3d = model;
+        window.currentModel = model;
 
         model.traverse(function (object) {
 
