@@ -17,10 +17,8 @@
 
 <svelte:window bind:innerWidth={width} bind:innerHeight={height} on:resize={cameraUpdater} />
 
-<div class="demo-container">
-	<canvas bind:this={el} {width} {height} />
-	<div class="lil-gui autoPlace" bind:this={guiContainer} />
-</div>
+<canvas bind:this={el} {width} {height} />
+<div class="lil-gui autoPlace" bind:this={guiContainer} />
 
 <style>
 	canvas {
