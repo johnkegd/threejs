@@ -4,11 +4,15 @@
 
 	let canvas;
 	let guiContainer;
+	let width;
+	let height;
 
 	onMount(() => {
-		createScene(canvas, guiContainer);
+		createScene(canvas, guiContainer, { width, height });
 	});
 </script>
+
+<svelte:window bind:innerWidth={width} bind:innerHeight={height} />
 
 <canvas bind:this={canvas} />
 <section class="section">

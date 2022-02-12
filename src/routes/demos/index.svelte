@@ -1,52 +1,32 @@
 <script>
 	import { onMount } from 'svelte';
-	import { createScene } from '$lib/threejs/scene';
+	import { createScene, cameraUpdater } from '$lib/threejs/demos';
+	import { displayFooter } from './store';
+
+	displayFooter.set(false);
 
 	let el;
+	let guiContainer;
+	let width;
+	let height;
 
 	onMount(() => {
-		createScene(el);
+		createScene(el, guiContainer, { width, height });
 	});
 </script>
 
-<div class="projects">
-	<ul>
-		<li><a href="/demos/galaxy">Galaxy</a></li>
-		<li><a href="/demos/cementery">Cementery</a></li>
-		<li><a href="/demos/raycaster">Raycaster</a></li>
-		<li><a href="/demos/scroll">Scroll</a></li>
-		<li><a href="/demos/soldier">Soldier</a></li>
-	</ul>
+<svelte:window bind:innerWidth={width} bind:innerHeight={height} on:resize={cameraUpdater} />
+
+<div class="demo-container">
+	<canvas bind:this={el} {width} {height} />
+	<div class="lil-gui autoPlace" bind:this={guiContainer} />
 </div>
 
-<canvas bind:this={el} />
-
 <style>
-	.projects {
-		position: absolute;
-	}
-
-	.projects ul {
-		display: flex;
-		list-style: none !important;
-	}
-
-	.projects ul li {
-		position: relative;
-		height: 100%;
-	}
-
-	.projects ul li a {
-		display: flex;
-		height: 100%;
-		align-items: center;
-		justify-content: center;
-		padding: 0 1em;
-		color: var(--pure-white);
-		font-weight: 700;
-		font-size: 0.8rem;
-		letter-spacing: 0.05em;
-		text-decoration: none;
-		transition: color 0.2s linear;
+	canvas {
+		position: fixed;
+		top: 0;
+		left: 0;
+		outline: none;
 	}
 </style>

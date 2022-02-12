@@ -17,7 +17,7 @@
 		</svg>
 		<ul>
 			<li class:active={$page.url.pathname === '/'}><a sveltekit:prefetch href="/">Home</a></li>
-			<li class:active={$page.url.pathname === '/demos'}>
+			<li class:active={$page.url.pathname === '/demos' || $page.url.pathname.includes('/demos/')}>
 				<a sveltekit:prefetch href="/demos">Demos</a>
 			</li>
 			<li class:active={$page.url.pathname === '/todos'}>
@@ -28,20 +28,14 @@
 			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
 		</svg>
 	</nav>
-
-	<div class="corner">
-		<!-- TODO put something else here? github link? -->
-	</div>
+	<slot name="header-submenu" class={$$props.class} />
+	<div class="corner" />
 </header>
 
 <style>
 	header {
 		display: flex;
 		justify-content: space-between;
-	}
-
-	header.demos {
-		background-color: black;
 	}
 
 	.corner {
