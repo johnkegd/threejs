@@ -66,24 +66,29 @@ function initGui(guiContainer) {
 
 
 
-export const createScene = (el, guiContainer, sizes) => {
-    windowSizes = sizes;
-    renderer = new THREE.WebGLRenderer({ antialias: true, canvas: el, alpha: true });
-    renderer.setSize(sizes.width, sizes.height);
-
-    controls = new OrbitControls(camera, el);
-
-    updateCameraAspect();
-    initGui(guiContainer);
-
-    animate();
-}
-
 
 export const cameraUpdater = (ev) => {
-    windowSizes = { width: ev.currentTarget.innerWidth, height: ev.currentTarget.innerHeight };
-    console.log(windowSizes);
+    if (ev && ev.currentTarget) {
+        windowSizes = { width: ev.currentTarget.innerWidth, height: ev.currentTarget.innerHeight };
+    }
+
     renderer.setSize(windowSizes.width, windowSizes.height);
     camera.aspect = windowSizes.width / windowSizes.height;
     camera.updateProjectionMatrix();
+}
+
+
+
+export const createScene = (el, guiContainer, sizes) => {
+    windowSizes = sizes;
+    renderer = new THREE.WebGLRenderer({ antialias: true, canvas: el, alpha: true });
+
+    controls = new OrbitControls(camera, el);
+
+    console.log(window);
+
+    cameraUpdater();
+    initGui(guiContainer);
+
+    animate();
 }
