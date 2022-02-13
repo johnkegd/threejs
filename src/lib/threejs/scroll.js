@@ -4,6 +4,7 @@ import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 let renderer, controls, windowSizes;
 
 const scene = new THREE.Scene();
+const clock = new THREE.Clock();
 const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 1000);
 camera.position.z = 6;
 //adding camera
@@ -11,38 +12,50 @@ scene.add(camera);
 
 
 const settings = {
-    color: "#ffeded",
+    globalColor: "#ffeded",
     distanceBetween: 4,
     scrollY: 0,
 };
 
-const material = new THREE.MeshToonMaterial({ color: settings.color });
+const torusSettings = {
+    color: "#ffeded",
+    radius: 1,
+    tube: 0.4,
+    radialSegments: 16,
+    tubularSegments: 60,
+};
+
+
+/***
+ * init objects, geometries, materials
+ */
+const material = new THREE.MeshToonMaterial({ color: settings.globalColor });
 
 const geometriesGroup = new THREE.Group();
-//adding group
+//adding group for meshes
 scene.add(geometriesGroup);
 
-const torus = new THREE.Mesh(
-    new THREE.TorusGeometry(1, 0.4, 16, 60),
+const torusGeometry = new THREE.TorusGeometry(
+    torusSettings.radius,
+    torusSettings.tube,
+    torusSettings.radialSegments,
+    torusSettings.tubularSegments);
+const torus = new THREE.Mesh(torusGeometry, material);
+
+const cone = new THREE.Mesh(new THREE.ConeGeometry(1, 2, 32),
     material,
 );
-
-
-const cone = new THREE.Mesh(
-    new THREE.ConeGeometry(1, 2, 32),
-    material,
-);
-
 const torusKnot = new THREE.Mesh(
     new THREE.TorusKnotGeometry(0.8, 0.35, 100, 16),
     material,
 );
-torus.position.y = - settings.distanceBetween * 0;
-cone.position.y = - settings.distanceBetween * 1;
-torusKnot.position.y = - settings.distanceBetween * 2;
+torus.position.y = -settings.distanceBetween * 0;
+cone.position.y = -settings.distanceBetween * 1;
+torusKnot.position.y = -settings.distanceBetween * 2;
 
 // adding meshes to geometriesGroup
 geometriesGroup.add(torus, cone, torusKnot);
+
 
 
 const directionalLight = new THREE.DirectionalLight('#ffffff', 1);
@@ -51,23 +64,44 @@ directionalLight.position.set(1, 1, 0);
 scene.add(directionalLight);
 
 
+function generateGeometry(mesh, geometry) {
+    mesh.geometry.dispose();
+    mesh.geometry = geometry;
+}
+
+
+
 
 function initGui(guiContainer) {
     if (guiContainer) {
         const gui = new GUI({ container: guiContainer });
-        gui.addColor(settings, "color").onChange(() => {
-            material.color.set(settings.color);
+        gui.addColor(settings, "globalColor").onChange(() => {
+            console.log("globalColor change");
+            material.color.set(settings.globalColor);
         });
+
+        const geometriesFolder = gui.addFolder('Geometries');
+        const torusFolder = geometriesFolder.addFolder('Torus');
+
+        torusFolder.add(torusSettings, 'radius').min(0.001).max(10).step(0.001).onChange(() => {
+            const geometry = new THREE.TorusGeometry(
+                torusSettings.radius,
+                torusSettings.tube,
+                torusSettings.radialSegments,
+                torusSettings.tubularSegments,
+            );
+            generateGeometry(torus, geometry);
+        });
+
     }
 }
 
 
-const clock = new THREE.Clock();
 
 const animation = () => {
     const elapsedTime = clock.getElapsedTime();
 
-    camera.position.y = - settings.scrollY / windowSizes.height * settings.distanceBetween;
+    camera.position.y = -settings.scrollY / windowSizes.height * settings.distanceBetween;
 
     for (const mesh of geometriesGroup.children) {
         mesh.rotation.x = elapsedTime * 0.1;
