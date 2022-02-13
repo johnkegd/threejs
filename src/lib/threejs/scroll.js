@@ -13,6 +13,7 @@ scene.add(camera);
 const settings = {
     color: "#ffeded",
     distanceBetween: 4,
+    scrollY: 0,
 };
 
 const material = new THREE.MeshToonMaterial({ color: settings.color });
@@ -66,6 +67,8 @@ const clock = new THREE.Clock();
 const animation = () => {
     const elapsedTime = clock.getElapsedTime();
 
+    camera.position.y = - settings.scrollY / windowSizes.height * settings.distanceBetween;
+
     for (const mesh of geometriesGroup.children) {
         mesh.rotation.x = elapsedTime * 0.1;
         mesh.rotation.y = elapsedTime * 0.12;
@@ -87,7 +90,7 @@ export const windowResize = (ev) => {
 }
 
 export const scrollUpdate = () => {
-    camera.position.y = window.scrollY;
+    settings.scrollY = window.scrollY;
 }
 
 export const createScene = (canvas, guiContainer, sizes) => {
