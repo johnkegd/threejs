@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
+import { addDefaultGeometryGui } from '$lib/threejs/utils/geometry-browser.js';
 
 let renderer, controls, windowSizes;
 
@@ -63,15 +64,6 @@ directionalLight.position.set(1, 1, 0);
 //adding light
 scene.add(directionalLight);
 
-
-function generateGeometry(mesh, geometry) {
-    mesh.geometry.dispose();
-    mesh.geometry = geometry;
-}
-
-
-
-
 function initGui(guiContainer) {
     if (guiContainer) {
         const gui = new GUI({ container: guiContainer });
@@ -81,17 +73,24 @@ function initGui(guiContainer) {
         });
 
         const geometriesFolder = gui.addFolder('Geometries');
+
         const torusFolder = geometriesFolder.addFolder('Torus');
 
-        torusFolder.add(torusSettings, 'radius').min(0.001).max(10).step(0.001).onChange(() => {
-            const geometry = new THREE.TorusGeometry(
-                torusSettings.radius,
-                torusSettings.tube,
-                torusSettings.radialSegments,
-                torusSettings.tubularSegments,
-            );
-            generateGeometry(torus, geometry);
-        });
+        const coneFolder = geometriesFolder.addFolder('Cone');
+        coneFolder.close();
+
+        const torusKnotFolder = geometriesFolder.addFolder('TorusKnout');
+        torusKnotFolder.close();
+
+        addDefaultGeometryGui(torus, torusFolder);
+        addDefaultGeometryGui(cone, coneFolder);
+        addDefaultGeometryGui(torusKnot, torusKnotFolder);
+
+
+        // by one
+        /* torusFolder.add(torusSettings, 'radius').min(0.001).max(10).step(0.001).onChange(() => {
+            meshGeometryUpdater(torus, torusSettings);
+        }); */
 
     }
 }
