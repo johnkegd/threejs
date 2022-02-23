@@ -55,7 +55,7 @@ function init(el, container) {
     scene.add(mesh);
 
     const loader = new GLTFLoader();
-    loader.load('/models/gltf/gem.glb', function (gltf) {
+    loader.load('/models/gltf/soldier.glb', function (gltf) {
 
         model = gltf.scene;
         scene.add(model);
@@ -102,10 +102,10 @@ function init(el, container) {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.shadowMap.enabled = true;
-    //container.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     stats = new Stats();
-    //container.appendChild(stats.dom);
+    container.appendChild(stats.dom);
 
     window.addEventListener('resize', onWindowResize);
 
