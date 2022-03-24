@@ -2,8 +2,9 @@ import * as THREE from 'three';
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 import { addDefaultGeometryGui } from '$lib/threejs/utils/geometry-browser.js';
 import { ParametricGeometry } from 'three';
+import gsap from 'gsap';
 
-let renderer, controls, windowSizes, previousTime = 0;
+let renderer, controls, windowSizes, previousTime = 0, currentSection = 0;
 
 const scene = new THREE.Scene();
 const clock = new THREE.Clock();
@@ -154,8 +155,8 @@ const animation = () => {
     cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
 
     for (const mesh of geometriesGroup.children) {
-        mesh.rotation.x = elapsedTime * 0.1;
-        mesh.rotation.y = elapsedTime * 0.12;
+        mesh.rotation.x += deltaTime * 0.1;
+        mesh.rotation.y += deltaTime * 0.12;
     }
 
     requestAnimationFrame(animation);
@@ -176,11 +177,28 @@ export const windowResize = (ev) => {
 export const mouseMove = (ev) => {
     cursor.x = ev.clientX / windowSizes.width - 0.5;
     cursor.y = ev.clientY / windowSizes.height - 0.5;
-    window.cursor = cursor;
 }
 
 export const scrollUpdate = () => {
     settings.scrollY = window.scrollY;
+    const calculation = settings.scrollY / windowSizes.height;
+    const newSection = Math.round(calculation > 0.30 ? calculation - 0.30 : calculation);
+    window.sectionSize = newSection;
+    window.meshes = geometriesGroup;
+
+    if (newSection !== currentSection) {
+        console.log("do animation");
+        currentSection = newSection;
+        gsap.to(geometriesGroup.children[currentSection].rotation,
+            {
+                duration: 1.5,
+                ease: 'power2.inOut',
+                x: '+=6',
+                y: '+=3',
+                z: '+=1.5'
+            }
+        );
+    }
 }
 
 export const createScene = (canvas, guiContainer, sizes) => {
