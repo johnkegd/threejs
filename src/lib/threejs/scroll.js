@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 import { addDefaultGeometryGui } from '$lib/threejs/utils/geometry-browser.js';
+import { ParametricGeometry } from 'three';
 
-let renderer, controls, windowSizes;
+let renderer, controls, windowSizes, previousTime = 0;
 
 const scene = new THREE.Scene();
 const clock = new THREE.Clock();
@@ -110,18 +111,47 @@ function initGui(guiContainer) {
     }
 }
 
+/**
+ * Particles
+ */
+function addParticles() {
+    const particlesCount = 600;
+    const positions = new Float32Array(particlesCount * 3);
+
+    for (let i = 0; i < particlesCount; i++) {
+        positions[i * 3 + 0] = (Math.random() - 0.5) * 10;
+        positions[i * 3 + 1] = settings.distanceBetween * 0.5 - Math.random() * settings.distanceBetween * geometriesGroup.children.length;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+    }
+
+    const particlesGeometry = new THREE.BufferGeometry();
+    particlesGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+    const particlesMaterial = new THREE.PointsMaterial({
+        color: settings.globalColor,
+        sizeAttenuation: true,
+        size: 0.03,
+    });
+
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
+
+}
+
 
 
 const animation = () => {
     const elapsedTime = clock.getElapsedTime();
+    const deltaTime = elapsedTime - previousTime;
+    previousTime = elapsedTime;
 
     camera.position.y = -settings.scrollY / windowSizes.height * settings.distanceBetween;
 
-    const parallaxX = cursor.x;
-    const parallaxY = -cursor.y;
+    const parallaxX = cursor.x * 0.5;
+    const parallaxY = -cursor.y * 0.5;
 
-    cameraGroup.position.x = parallaxX;
-    cameraGroup.position.y = parallaxY;
+    cameraGroup.position.x += (parallaxX - cameraGroup.position.x) * 5 * deltaTime;
+    cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
 
     for (const mesh of geometriesGroup.children) {
         mesh.rotation.x = elapsedTime * 0.1;
@@ -165,5 +195,6 @@ export const createScene = (canvas, guiContainer, sizes) => {
 
     windowResize();
     initGui(guiContainer);
+    addParticles();
     animation();
 }
