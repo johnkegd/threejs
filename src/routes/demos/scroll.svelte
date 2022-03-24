@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { createScene, windowResize, scrollUpdate } from '$lib/threejs/scroll';
+	import { createScene, windowResize, scrollUpdate, mouseMove } from '$lib/threejs/scroll';
 
 	let canvas;
 	let guiContainer;
@@ -17,6 +17,7 @@
 	bind:innerHeight={height}
 	on:resize={windowResize}
 	on:scroll={scrollUpdate}
+	on:mousemove={mouseMove}
 />
 
 <canvas bind:this={canvas} />

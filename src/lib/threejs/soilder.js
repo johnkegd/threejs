@@ -19,7 +19,6 @@ let sizeOfNextStep = 0;
 
 function init(el, container) {
     canvas = el;
-    canvasContainer = container;
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.set(1, 2, - 3);
     camera.lookAt(0, 1, 0);
@@ -54,10 +53,17 @@ function init(el, container) {
     mesh.receiveShadow = true;
     scene.add(mesh);
 
+    const textureLoader = new THREE.TextureLoader();
+    const soldierUkreine = textureLoader.load('/textures/demos/soldier/soldier-texture-1.png');
+    const textureTest = new THREE.Texture();
+
     const loader = new GLTFLoader();
     loader.load('/models/gltf/soldier.glb', function (gltf) {
 
         model = gltf.scene;
+
+        model.children[0].children[1].material.map = soldierUkreine;
+
         scene.add(model);
         window.currentModel = model;
 
@@ -111,9 +117,9 @@ function init(el, container) {
 
 }
 
-function createPanel() {
+function createPanel(guiContainer) {
 
-    const panel = new GUI({ width: 310, container: canvasContainer });
+    const panel = new GUI({ width: 310, container: guiContainer });
 
     const folder1 = panel.addFolder('Visibility');
     const folder2 = panel.addFolder('Activation/Deactivation');

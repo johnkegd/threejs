@@ -6,14 +6,20 @@ let renderer, controls, windowSizes;
 
 const scene = new THREE.Scene();
 const clock = new THREE.Clock();
+
+/**
+ * Cameras
+ */
+const cameraGroup = new THREE.Group();
+scene.add(cameraGroup)
 const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 1000);
 camera.position.z = 6;
 //adding camera
-scene.add(camera);
+cameraGroup.add(camera);
 
 
 const settings = {
-    globalColor: "#ffeded",
+    globalColor: "#921111",
     distanceBetween: 4,
     scrollY: 0,
 };
@@ -26,6 +32,10 @@ const torusSettings = {
     tubularSegments: 60,
 };
 
+const cursor = {
+    x: 0,
+    y: 0,
+};
 
 /***
  * init objects, geometries, materials
@@ -50,6 +60,11 @@ const torusKnot = new THREE.Mesh(
     new THREE.TorusKnotGeometry(0.8, 0.35, 100, 16),
     material,
 );
+
+torus.position.x = 1;
+cone.position.x = -1;
+torusKnot.position.x = 1;
+
 torus.position.y = -settings.distanceBetween * 0;
 cone.position.y = -settings.distanceBetween * 1;
 torusKnot.position.y = -settings.distanceBetween * 2;
@@ -102,6 +117,12 @@ const animation = () => {
 
     camera.position.y = -settings.scrollY / windowSizes.height * settings.distanceBetween;
 
+    const parallaxX = cursor.x;
+    const parallaxY = -cursor.y;
+
+    cameraGroup.position.x = parallaxX;
+    cameraGroup.position.y = parallaxY;
+
     for (const mesh of geometriesGroup.children) {
         mesh.rotation.x = elapsedTime * 0.1;
         mesh.rotation.y = elapsedTime * 0.12;
@@ -122,6 +143,12 @@ export const windowResize = (ev) => {
     camera.updateProjectionMatrix();
 }
 
+export const mouseMove = (ev) => {
+    cursor.x = ev.clientX / windowSizes.width - 0.5;
+    cursor.y = ev.clientY / windowSizes.height - 0.5;
+    window.cursor = cursor;
+}
+
 export const scrollUpdate = () => {
     settings.scrollY = window.scrollY;
 }
@@ -130,10 +157,9 @@ export const createScene = (canvas, guiContainer, sizes) => {
     windowSizes = sizes;
     renderer = new THREE.WebGLRenderer({ antialias: true, canvas, alpha: true });
 
-    console.log(geometriesGroup);
 
     const textureLoader = new THREE.TextureLoader();
-    const gradientTexture = textureLoader.load('/textures/demos/scroll/gradients/5.jpg');
+    const gradientTexture = textureLoader.load('/textures/demos/scroll/gradients/3.jpg');
     gradientTexture.magFilter = THREE.NearestFilter;
     material.gradientMap = gradientTexture;
 

@@ -3,13 +3,20 @@
 	import { createScene } from '$lib/threejs/soilder';
 
 	let el;
-	let container;
+	let guiContainer;
 
 	onMount(() => {
-		createScene(el, container);
+		createScene(el, guiContainer);
 	});
 </script>
 
-<div bind:this={container}>
-	<canvas bind:this={el} />
-</div>
+<canvas bind:this={el} />
+<div class="lil-gui autoPlace" bind:this={guiContainer} />
+
+<style>
+	canvas {
+		position: fixed;
+		top: 0;
+		left: 0;
+	}
+</style>
